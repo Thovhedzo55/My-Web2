@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Emergency Loan Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6bff;
+            --secondary: #f8f9fa;
+            --dark: #343a40;
+            --light: #ffffff;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        header h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #e9ecef;
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+            border: 2px solid #e9ecef;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-align: center;
+        }
+
+        .progress-step.active .step-number {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .progress-step.completed .step-number {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .progress-step.active .step-label,
+        .progress-step.completed .step-label {
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .form-section {
+            display: none;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            background-color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 i {
+            margin-right: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .file-upload {
+            border: 2px dashed #ced4da;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background-color: rgba(74, 107, 255, 0.05);
+        }
+
+        .file-upload i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .checkbox-group {
+            margin-bottom: 15px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            width: auto;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+
+        .interest-calc {
+            background-color: #e9f7ef;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .interest-calc.active {
+            display: block;
+        }
+
+        .interest-calc p {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .interest-calc span {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5bef;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #confirmationSection {
+            text-align: center;
+            padding: 40px;
+        }
+
+        #confirmationSection i {
+            font-size: 60px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        #confirmationSection h2 {
+            color: var(--success);
+            justify-content: center;
+        }
+
+        .tracking-number {
+            background-color: #e9f7ef;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .signature-pad {
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            cursor: crosshair;
+        }
+
+        .clear-signature {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .clear-signature:hover {
+            background-color: #e9ecef;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .progress-step .step-label {
+                display: none;
+            }
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .container {
+            background-color: #2d2d2d;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode header h1 {
+            color: #6d8bff;
+        }
+
+        body.dark-mode header p {
+            color: #aaa;
+        }
+
+        body.dark-mode .form-section {
+            background-color: #3a3a3a;
+        }
+
+        body.dark-mode h2 {
+            color: #6d8bff;
+        }
+
+        body.dark-mode label {
+            color: #ddd;
+        }
+
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background-color: #3a3a3a;
+            border-color: #555;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode input:focus,
+        body.dark-mode select:focus,
+        body.dark-mode textarea:focus {
+            border-color: #6d8bff;
+            box-shadow: 0 0 0 3px rgba(109, 139, 255, 0.3);
+        }
+
+        body.dark-mode .file-upload {
+            border-color: #555;
+            background-color: #3a3a3a;
+        }
+
+        body.dark-mode .file-upload:hover {
+            border-color: #6d8bff;
+            background-color: rgba(109, 139, 255, 0.1);
+        }
+
+        body.dark-mode .interest-calc {
+            background-color: #2a3a2f;
+        }
+
+        body.dark-mode .checkbox-label {
+            color: #ddd;
+        }
+
+        body.dark-mode .signature-pad {
+            border-color: #555;
+            background-color: #3a3a3a;
+        }
+
+        body.dark-mode .clear-signature {
+            background-color: #3a3a3a;
+            border-color: #555;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .clear-signature:hover {
+            background-color: #4a4a4a;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-hand-holding-usd"></i> Student Emergency Loan</h1>
+            <p>Get short-term financial assistance while waiting for your NSFAS, bursary, or parental allowance</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress-step completed" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-label">Personal Info</div>
+            </div>
+            <div class="progress-step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-label">Funding Info</div>
+            </div>
+            <div class="progress-step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-label">Documents</div>
+            </div>
+            <div class="progress-step" id="step4">
+                <div class="step-number">4</div>
+                <div class="step-label">Loan Details</div>
+            </div>
+            <div class="progress-step" id="step5">
+                <div class="step-number">5</div>
+                <div class="step-label">Confirmation</div>
+            </div>
+        </div>
+
+        <form id="loanForm">
+            <!-- Section 1: Student Personal Information -->
+            <div class="form-section active" id="section1">
+                <h2><i class="fas fa-user-graduate"></i> Personal Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentNumber">Student Number</label>
+                        <input type="text" id="studentNumber" name="studentNumber" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cellphone">Cellphone Number</label>
+                        <input type="tel" id="cellphone" name="cellphone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="institution">Institution Name</label>
+                        <select id="institution" name="institution" required>
+                            <option value="">Select your institution</option>
+                            <option value="University of Cape Town">University of Cape Town</option>
+                            <option value="University of the Witwatersrand">University of the Witwatersrand</option>
+                            <option value="Stellenbosch University">Stellenbosch University</option>
+                            <option value="University of Pretoria">University of Pretoria</option>
+                            <option value="University of Johannesburg">University of Johannesburg</option>
+                            <option value="University of KwaZulu-Natal">University of KwaZulu-Natal</option>
+                            <option value="Rhodes University">Rhodes University</option>
+                            <option value="University of the Western Cape">University of the Western Cape</option>
+                            <option value="University of Limpopo">University of Limpopo</option>
+                            <option value="University of Venda">University of Venda</option>
+                            <option value="University of Fort Hare">University of Fort Hare</option>
+                            <option value="North-West University">North-West University</option>
+                            <option value="University of Zululand">University of Zululand</option>
+                            <option value="Cape Peninsula University of Technology">Cape Peninsula University of Technology</option>
+                            <option value="Tshwane University of Technology">Tshwane University of Technology</option>
+                            <option value="Durban University of Technology">Durban University of Technology</option>
+                            <option value="Vaal University of Technology">Vaal University of Technology</option>
+                            <option value="Central University of Technology">Central University of Technology</option>
+                            <option value="Mangosuthu University of Technology">Mangosuthu University of Technology</option>
+                            <option value="Other">Other (please specify)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="otherInstitutionGroup" style="display: none;">
+                        <label for="otherInstitution">Specify Institution</label>
+                        <input type="text" id="otherInstitution" name="otherInstitution">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="yearOfStudy">Year of Study</label>
+                        <select id="yearOfStudy" name="yearOfStudy" required>
+                            <option value="">Select year</option>
+                            <option value="1">First Year</option>
+                            <option value="2">Second Year</option>
+                            <option value="3">Third Year</option>
+                            <option value="4">Fourth Year</option>
+                            <option value="5+">Fifth Year or Postgraduate</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldOfStudy">Field of Study</label>
+                        <input type="text" id="fieldOfStudy" name="fieldOfStudy" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="residence">Current Residence (Res name or location)</label>
+                        <input type="text" id="residence" name="residence" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="idNumber">ID Number or Passport (if international)</label>
+                        <input type="text" id="idNumber" name="idNumber">
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" onclick="nextSection(1)">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Section 2: Funding Source Information -->
+            <div class="form-section" id="section2">
+                <h2><i class="fas fa-money-bill-wave"></i> Funding Information</h2>
+                
+                <div class="form-group">
+                    <label>How are you funded?</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="radio" name="fundingSource" value="NSFAS" required> NSFAS
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="fundingSource" value="Bursary"> Bursary
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="fundingSource" value="Parents"> Parents/Guardian
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="fundingSource" value="Part-time work"> Part-time work
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="fundingSource" value="Other"> Other (please specify)
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="monthlyAllowance">Monthly Allowance Amount (ZAR)</label>
+                        <input type="number" id="monthlyAllowance" name="monthlyAllowance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="allowanceDate">Preferred Date for Allowance Receipt</label>
+                        <select id="allowanceDate" name="allowanceDate" required>
+                            <option value="">Select date</option>
+                            <option value="1">1st of the month</option>
+                            <option value="15">15th of the month</option>
+                            <option value="25">25th of the month</option>
+                            <option value="other">Other date</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="otherDateGroup" style="display: none;">
+                    <label for="otherAllowanceDate">Specify Date (1-31)</label>
+                    <input type="number" id="otherAllowanceDate" name="otherAllowanceDate" min="1" max="31">
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection(2)"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection(2)">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Section 3: Upload Required Documents -->
+            <div class="form-section" id="section3">
+                <h2><i class="fas fa-file-upload"></i> Required Documents</h2>
+                
+                <div class="form-group">
+                    <label>Proof of Registration or Student Card</label>
+                    <div class="file-upload" id="proofOfRegistrationUpload">
+                        <i class="fas fa-file-pdf"></i>
+                        <p>Click to upload PDF, JPG or PNG</p>
+                        <input type="file" id="proofOfRegistration" name="proofOfRegistration" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <div class="file-name" id="proofOfRegistrationName">No file selected</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Proof of Funding</label>
+                    <p class="small-text">(NSFAS status screenshot, bursary letter, or bank statement showing monthly deposits)</p>
+                    <div class="file-upload" id="proofOfFundingUpload">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <p>Click to upload PDF, JPG or PNG</p>
+                        <input type="file" id="proofOfFunding" name="proofOfFunding" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <div class="file-name" id="proofOfFundingName">No file selected</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Copy of ID (Optional but encouraged)</label>
+                    <div class="file-upload" id="idCopyUpload">
+                        <i class="fas fa-id-card"></i>
+                        <p>Click to upload PDF, JPG or PNG</p>
+                        <input type="file" id="idCopy" name="idCopy" accept=".pdf,.jpg,.jpeg,.png">
+                        <div class="file-name" id="idCopyName">No file selected</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <h3><i class="fas fa-user-friends"></i> Next of Kin / Emergency Contact</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="kinName">Full Name</label>
+                            <input type="text" id="kinName" name="kinName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kinRelationship">Relationship to you</label>
+                            <select id="kinRelationship" name="kinRelationship" required>
+                                <option value="">Select relationship</option>
+                                <option value="Mother">Mother</option>
+                                <option value="Father">Father</option>
+                                <option value="Sibling">Sibling</option>
+                                <option value="Uncle/Aunt">Uncle/Aunt</option>
+                                <option value="Grandparent">Grandparent</option>
+                                <option value="Guardian">Guardian</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="kinPhone">Phone Number</label>
+                            <input type="tel" id="kinPhone" name="kinPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kinAddress">Address (Optional)</label>
+                            <input type="text" id="kinAddress" name="kinAddress">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection(3)"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="nextSection(3)">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Section 4: Loan Request Details -->
+            <div class="form-section" id="section4">
+                <h2><i class="fas fa-hand-holding-usd"></i> Loan Details</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="loanAmount">Amount Requested (ZAR)</label>
+                        <input type="number" id="loanAmount" name="loanAmount" min="100" max="5000" step="50" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="repaymentDate">Date You Expect to Repay</label>
+                        <input type="date" id="repaymentDate" name="repaymentDate" required>
+                    </div>
+                </div>
+                
+                <div class="interest-calc" id="interestCalc">
+                    <p>Interest (15%): <span id="interestAmount">R0.00</span></p>
+                    <p>Total to repay: <span id="totalRepayment">R0.00</span></p>
+                    <p>Example: R200 + 15% = R230</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loanReason">Reason for the Loan</label>
+                    <textarea id="loanReason" name="loanReason" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Terms and Conditions</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms1" name="terms1" required>
+                            I declare that the information provided is true and I commit to repay the loan as agreed.
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms2" name="terms2" required>
+                            I understand that failure to repay may lead to being blacklisted, reported to my funding provider, or legal recovery steps.
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Digital Signature (Type your full name as agreement)</label>
+                    <input type="text" id="digitalSignature" name="digitalSignature" placeholder="Type your full name" required>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="prevSection(4)"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="validateAndSubmit()">Submit Application</button>
+                </div>
+            </div>
+
+            <!-- Section 5: Confirmation -->
+            <div class="form-section" id="section5">
+                <div id="confirmationSection">
+                    <i class="fas fa-check-circle"></i>
+                    <h2>Application Submitted Successfully!</h2>
+                    <p>Thank you for your loan application. We will review your information and get back to you within 24 hours.</p>
+                    <div class="tracking-number">Tracking Number: <span id="trackingNumber">STU-LOAN-2023-XXXX</span></div>
+                    <p>We've sent a confirmation email to <span id="confirmationEmail">user@example.com</span></p>
+                    <button type="button" class="btn btn-primary" onclick="printApplication()"><i class="fas fa-print"></i> Print Confirmation</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Handle institution selection
+        document.getElementById('institution').addEventListener('change', function() {
+            const otherInstitutionGroup = document.getElementById('otherInstitutionGroup');
+            otherInstitutionGroup.style.display = this.value === 'Other' ? 'block' : 'none';
+        });
+
+        // Handle allowance date selection
+        document.getElementById('allowanceDate').addEventListener('change', function() {
+            const otherDateGroup = document.getElementById('otherDateGroup');
+            otherDateGroup.style.display = this.value === 'other' ? 'block' : 'none';
+        });
+
+        // File upload handlers
+        document.getElementById('proofOfRegistrationUpload').addEventListener('click', function() {
+            document.getElementById('proofOfRegistration').click();
+        });
+        
+        document.getElementById('proofOfFundingUpload').addEventListener('click', function() {
+            document.getElementById('proofOfFunding').click();
+        });
+        
+        document.getElementById('idCopyUpload').addEventListener('click', function() {
+            document.getElementById('idCopy').click();
+        });
+
+        // Display selected file names
+        document.getElementById('proofOfRegistration').addEventListener('change', function() {
+            document.getElementById('proofOfRegistrationName').textContent = this.files[0] ? this.files[0].name : 'No file selected';
+        });
+        
+        document.getElementById('proofOfFunding').addEventListener('change', function() {
+            document.getElementById('proofOfFundingName').textContent = this.files[0] ? this.files[0].name : 'No file selected';
+        });
+        
+        document.getElementById('idCopy').addEventListener('change', function() {
+            document.getElementById('idCopyName').textContent = this.files[0] ? this.files[0].name : 'No file selected';
+        });
+
+        // Interest calculation
+        document.getElementById('loanAmount').addEventListener('input', function() {
+            const amount = parseFloat(this.value) || 0;
+            const interest = amount * 0.15;
+            const total = amount + interest;
+            
+            document.getElementById('interestAmount').textContent = 'R' + interest.toFixed(2);
+            document.getElementById('totalRepayment').textContent = 'R' + total.toFixed(2);
+            
+            const interestCalc = document.getElementById('interestCalc');
+            if (amount > 0) {
+                interestCalc.classList.add('active');
+            } else {
+                interestCalc.classList.remove('active');
+            }
+        });
+
+        // Form navigation
+        let currentSection = 1;
+
+        function nextSection(sectionNum) {
+            // Validate current section before proceeding
+            if (!validateSection(sectionNum)) {
+                return;
+            }
+            
+            document.getElementById(`section${sectionNum}`).classList.remove('active');
+            document.getElementById(`section${sectionNum + 1}`).classList.add('active');
+            
+            document.getElementById(`step${sectionNum}`).classList.remove('active');
+            document.getElementById(`step${sectionNum}`).classList.add('completed');
+            document.getElementById(`step${sectionNum + 1}`).classList.add('active');
+            
+            currentSection = sectionNum + 1;
+            
+            // Scroll to top of new section
+            document.getElementById(`section${currentSection}`).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function prevSection(sectionNum) {
+            document.getElementById(`section${sectionNum}`).classList.remove('active');
+            document.getElementById(`section${sectionNum - 1}`).classList.add('active');
+            
+            document.getElementById(`step${sectionNum}`).classList.remove('active');
+            document.getElementById(`step${sectionNum - 1}`).classList.add('active');
+            document.getElementById(`step${sectionNum - 1}`).classList.remove('completed');
+            
+            currentSection = sectionNum - 1;
+            
+            // Scroll to top of new section
+            document.getElementById(`section${currentSection}`).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function validateSection(sectionNum) {
+            if (sectionNum === 1) {
+                const requiredFields = ['fullName', 'studentNumber', 'cellphone', 'email', 'institution', 'yearOfStudy', 'fieldOfStudy', 'residence'];
+                for (const field of requiredFields) {
+                    const element = document.getElementById(field);
+                    if (!element.value.trim()) {
+                        alert(`Please fill in the ${element.labels[0].textContent} field`);
+                        element.focus();
+                        return false;
+                    }
+                }
+                
+                if (document.getElementById('institution').value === 'Other' && !document.getElementById('otherInstitution').value.trim()) {
+                    alert('Please specify your institution');
+                    document.getElementById('otherInstitution').focus();
+                    return false;
+                }
+            }
+            
+            if (sectionNum === 2) {
+                const fundingSource = document.querySelector('input[name="fundingSource"]:checked');
+                if (!fundingSource) {
+                    alert('Please select how you are funded');
+                    return false;
+                }
+                
+                if (!document.getElementById('monthlyAllowance').value.trim()) {
+                    alert('Please enter your monthly allowance amount');
+                    document.getElementById('monthlyAllowance').focus();
+                    return false;
+                }
+                
+                if (!document.getElementById('allowanceDate').value.trim()) {
+                    alert('Please select your preferred allowance date');
+                    document.getElementById('allowanceDate').focus();
+                    return false;
+                }
+                
+                if (document.getElementById('allowanceDate').value === 'other' && !document.getElementById('otherAllowanceDate').value.trim()) {
+                    alert('Please specify your preferred allowance date');
+                    document.getElementById('otherAllowanceDate').focus();
+                    return false;
+                }
+            }
+            
+            if (sectionNum === 3) {
+                if (!document.getElementById('proofOfRegistration').files.length) {
+                    alert('Please upload your proof of registration or student card');
+                    return false;
+                }
+                
+                if (!document.getElementById('proofOfFunding').files.length) {
+                    alert('Please upload your proof of funding');
+                    return false;
+                }
+                
+                const requiredKinFields = ['kinName', 'kinRelationship', 'kinPhone'];
+                for (const field of requiredKinFields) {
+                    const element = document.getElementById(field);
+                    if (!element.value.trim()) {
+                        alert(`Please fill in the ${element.labels[0].textContent} field`);
+                        element.focus();
+                        return false;
+                    }
+                }
+            }
+            
+            return true;
+        }
+
+        function validateAndSubmit() {
+            // Validate section 4
+            if (!document.getElementById('loanAmount').value.trim() || parseFloat(document.getElementById('loanAmount').value) <= 0) {
+                alert('Please enter a valid loan amount');
+                document.getElementById('loanAmount').focus();
+                return;
+            }
+            
+            if (!document.getElementById('repaymentDate').value.trim()) {
+                alert('Please select your expected repayment date');
+                document.getElementById('repaymentDate').focus();
+                return;
+            }
+            
+            if (!document.getElementById('loanReason').value.trim()) {
+                alert('Please provide a reason for your loan request');
+                document.getElementById('loanReason').focus();
+                return;
+            }
+            
+            if (!document.getElementById('terms1').checked || !document.getElementById('terms2').checked) {
+                alert('Please agree to the terms and conditions');
+                return;
+            }
+            
+            if (!document.getElementById('digitalSignature').value.trim()) {
+                alert('Please provide your digital signature by typing your full name');
+                document.getElementById('digitalSignature').focus();
+                return;
+            }
+            
+            // If all validations pass, proceed to confirmation
+            nextSection(4);
+            
+            // Generate tracking number
+            const trackingNumber = 'STU-LOAN-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('trackingNumber').textContent = trackingNumber;
+            
+            // Show confirmation email
+            const email = document.getElementById('email').value;
+            document.getElementById('confirmationEmail').textContent = email;
+            
+            // Here you would normally submit the form to a server
+            // For this demo, we'll just log the form data
+            const formData = new FormData(document.getElementById('loanForm'));
+            const formDataObj = {};
+            formData.forEach((value, key) => formDataObj[key] = value);
+            console.log('Form data:', formDataObj);
+            
+            // In a real application, you would send this data to your backend
+            // For example:
+            // fetch('/api/loan-application', {
+            //     method: 'POST',
+            //     body: formData
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     console.log('Success:', data);
+            //     document.getElementById('trackingNumber').textContent = data.trackingNumber;
+            //     nextSection(4);
+            // })
+            // .catch((error) => {
+            //     console.error('Error:', error);
+            //     alert('There was an error submitting your application. Please try again.');
+            // });
+        }
+
+        function printApplication() {
+            // Create a printable version of the confirmation
+            const printContent = `
+                <html>
+                    <head>
+                        <title>Loan Application Confirmation</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+                            h1 { color: #4a6bff; }
+                            .header { text-align: center; margin-bottom: 30px; }
+                            .details { margin-bottom: 20px; }
+                            .tracking-number { font-weight: bold; font-size: 18px; margin: 20px 0; }
+                            .footer { margin-top: 40px; font-size: 12px; color: #666; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>Student Emergency Loan Application</h1>
+                            <p>Confirmation Receipt</p>
+                        </div>
+                        
+                        <div class="details">
+                            <p><strong>Applicant Name:</strong> ${document.getElementById('fullName').value}</p>
+                            <p><strong>Student Number:</strong> ${document.getElementById('studentNumber').value}</p>
+                            <p><strong>Institution:</strong> ${document.getElementById('institution').value === 'Other' ? document.getElementById('otherInstitution').value : document.getElementById('institution').value}</p>
+                            <p><strong>Loan Amount:</strong> R${document.getElementById('loanAmount').value}</p>
+                            <p><strong>Total to Repay:</strong> ${document.getElementById('totalRepayment').textContent}</p>
+                            <p><strong>Expected Repayment Date:</strong> ${document.getElementById('repaymentDate').value}</p>
+                        </div>
+                        
+                        <div class="tracking-number">
+                            Tracking Number: ${document.getElementById('trackingNumber').textContent}
+                        </div>
+                        
+                        <div class="footer">
+                            <p>This is a confirmation of your loan application submission. Please keep this receipt for your records.</p>
+                            <p>Application submitted on: ${new Date().toLocaleString()}</p>
+                        </div>
+                    </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 500);
+        }
+
+        // Theme toggle functionality
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // Set minimum date for repayment (tomorrow)
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        
+        const dd = String(tomorrow.getDate()).padStart(2, '0');
+        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const yyyy = tomorrow.getFullYear();
+        
+        document.getElementById('repaymentDate').min = `${yyyy}-${mm}-${dd}`;
+    </script>
+</body>
+</html>
